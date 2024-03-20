@@ -13,8 +13,9 @@ class ProductController extends Controller
     
     public function index(Request $request)
     {
+        $product_checked=Product::all();
         return view('product.add_product', [
-            'products' => Product::all()
+            'products' => $product_checked
         ]);
     }
 
@@ -23,7 +24,11 @@ class ProductController extends Controller
     public function checkPrice($products)
         {
             foreach ($products as $product) {
+                $product->ab_beautyworld = $this->abScanner($product->ab_beautyworld);
                 $product->hasaki = $this->hasakiScanner($product->hasaki);
+                $product->guardian = $this->guScanner($product->guardian);
+                $product->thegioiskinfood = $this->tgScanner($product->thegioiskinfood);
+                $product->lamthao = $this->ltScanner($product->lamthao);
             }
             return $products;
         }
@@ -35,6 +40,43 @@ class ProductController extends Controller
             $finalPrice = $crawler->filter('#product_final_price')->attr('value');
             return $finalPrice;
         }
+
+        private function guScanner($value)
+        {
+            $client = new Client();
+            $crawler = $client->request('GET', $value);
+            $finalPrice = $crawler->filter('span.price')->attr('value');
+            return $finalPrice;
+        }
+        private function tgScanner($value)
+        {
+            $client = new Client();
+            $crawler = $client->request('GET', $value);
+            $finalPrice = $crawler->filter('span.page-product-info-newprice span')->attr('value');
+            return $finalPrice;
+        }
+        private function ltScanner($link)
+        {
+            $client = new Client();
+            $crawler = $client->request('GET', $link);
+            $price = $crawler->filter('span.ProductPrice');
+            return $price->text();
+            
+        }
+        private function abScanner($link)
+        {
+            $client = new Client();
+            $crawler = $client->request('GET', $link);
+            $price = $crawler->filter('span.pro-price');
+            return $price->text();
+            
+        }
+
+        
+
+
+       
+
 
 
     public function store(Request $request)
