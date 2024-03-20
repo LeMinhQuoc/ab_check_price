@@ -109,10 +109,14 @@ $products = [
 </table>
 
 
+
+
+
+
+<a href="{{ route('add_p_form') }}" class="btn btn-primary">Chuyển hướng</a>
+
 <?php
 require_once '../vendor/autoload.php';
-
-
 use Goutte\Client;
 
 $client = new Client();

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController  as Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,3 +20,11 @@ Route::get('/', function () {
 Route::get('/check', function () {
     return view('check_file');
 });
+
+
+Route::get('/add_p_form', function () {
+    return view('product.add_product');
+})->name("add_p_form");
+// Route::post("/upload", 'ProductController@store')->name("upload");
+Route::post('products', [Product::class, 'store'])->name('products.store');
+Route::get('products', [Product::class, 'index'])->name('products.index');

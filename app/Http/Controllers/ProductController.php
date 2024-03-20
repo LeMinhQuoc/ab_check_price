@@ -7,6 +7,14 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
+    
+    public function index(Request $request)
+    {
+        return view('product.add_product', [
+            'products' => Product::all()
+        ]);
+    }
+
     public function store(Request $request)
 {
     $validatedData = $request->validate([
@@ -24,6 +32,7 @@ class ProductController extends Controller
 
     return redirect()->route('products.index')->with('success', 'Product created successfully.');
 }
+
 }
 
 
