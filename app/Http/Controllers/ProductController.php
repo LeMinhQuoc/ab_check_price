@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+require_once '../vendor/autoload.php';
+use Goutte\Client;
+            
 
 class ProductController extends Controller
 {
@@ -14,6 +17,25 @@ class ProductController extends Controller
             'products' => Product::all()
         ]);
     }
+
+
+
+    public function checkPrice($products)
+        {
+            foreach ($products as $product) {
+                $product->hasaki = $this->hasakiScanner($product->hasaki);
+            }
+            return $products;
+        }
+
+        private function hasakiScanner($value)
+        {
+            $client = new Client();
+            $crawler = $client->request('GET', $value);
+            $finalPrice = $crawler->filter('#product_final_price')->attr('value');
+            return $finalPrice;
+        }
+
 
     public function store(Request $request)
 {
