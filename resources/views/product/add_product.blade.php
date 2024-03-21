@@ -1,14 +1,47 @@
-<form action="{{ route('products.store') }}" method="POST">
+<style>
+.styled-form {
+    background-color: #333333;
+    padding: 20px;
+    color: #fff;
+    width: 200px;
+}
+
+.styled-input {
+    display: block;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    color: #333333;
+}
+
+.styled-button {
+    padding: 10px 20px;
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
+    color: #333333;
+    cursor: pointer;
+}
+
+.styled-button:hover {
+    background-color: #dddddd;
+}
+</style>
+
+
+
+<form action="{{ route('products.store') }}" method="POST" class="styled-form">
     @csrf
-    <input type="text" name="product_barcode" placeholder="barcode">
-    <input type="text" name="brand" placeholder="Brand">
-    <input type="text" name="product_name" placeholder="Product name">
-    <input type="text" name="ab_beautyworld" placeholder="AB Beautyworld">
-    <input type="text" name="hasaki" placeholder="Hasaki">
-    <input type="text" name="guardian" placeholder="Guardian">
-    <input type="text" name="thegioiskinfood" placeholder="thegioiskinfood">
-    <input type="text" name="lamthao" placeholder="lamthao">
-    <button type="submit">Submit</button>
+    <input type="text" class="styled-input" name="product_barcode" placeholder="barcode">
+    <input type="text" class="styled-input" name="brand" placeholder="Brand">
+    <input type="text" class="styled-input" name="product_name" placeholder="Product name">
+    <input type="text" class="styled-input" name="ab_beautyworld" placeholder="AB Beautyworld">
+    <input type="text" class="styled-input" name="hasaki" placeholder="Hasaki">
+    <input type="text" class="styled-input" name="guardian" placeholder="Guardian">
+    <input type="text" class="styled-input" name="thegioiskinfood" placeholder="thegioiskinfood">
+    <input type="text" class="styled-input" name="lamthao" placeholder="lamthao">
+    <button type="submit" class="styled-button">Submit</button>
 </form>
 
 <table>
