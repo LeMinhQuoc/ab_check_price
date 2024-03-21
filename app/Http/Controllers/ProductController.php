@@ -43,9 +43,9 @@ class ProductController extends Controller
             $crawler = $client->request('GET', $value);
             $finalPrice = $crawler->filter('#product_final_price')->attr('value');
         } catch (Exception $e) {
-            return "liên kêt không tồn tại hoặc sai định dạng";
+            return 0;
         }
-            return $finalPrice;
+            return $this->cTN($finalPrice);
         }
 
         private function guScanner($value)
@@ -57,14 +57,14 @@ class ProductController extends Controller
             try {
             $dom->loadHTML(file_get_contents($value));
         } catch (Exception $e) {
-            return "liên kêt không tồn tại hoặc sai định dạng";
+            return 0;
         }
             libxml_clear_errors();
     
             $xpath = new DOMXPath($dom);
             $prices = $xpath->query("//span[@class='price']");
             $price = $prices->item(0)->nodeValue;
-            return $price;
+            return $this->cTN($price)*1000;
 
         }
         private function tgScanner($value)
@@ -75,7 +75,7 @@ class ProductController extends Controller
         try {
         $dom->loadHTML(file_get_contents($value));
          } catch (Exception $e) {
-        return "liên kêt không tồn tại hoặc sai định dạng";
+        return 0;
          }
         libxml_clear_errors();
 
@@ -83,7 +83,7 @@ class ProductController extends Controller
         $prices = $xpath->query("//div[@class='page-product-info-newprice']");
         $price = $prices->item(0)->nodeValue;
         
-        return $price;
+        return $this->cTN($price)*1000;
         }
            
       
@@ -95,7 +95,7 @@ class ProductController extends Controller
         try {
         $dom->loadHTML(file_get_contents($value));}
         catch (Exception $e) {
-            return "liên kêt không tồn tại hoặc sai định dạng";
+            return 0;
              }
         libxml_clear_errors();
 
@@ -103,7 +103,7 @@ class ProductController extends Controller
         $prices = $xpath->query("//span[@class='current-price ProductPrice']");
         $price = $prices->item(0)->nodeValue; // Remove the trailing text from the price
 
-        $price = $price;
+        $price = $this->cTN($price)*1000;  
         
         return $price;        
         }
@@ -116,9 +116,22 @@ class ProductController extends Controller
             
         } catch (Exception $e) {
             // Handle the exception here
-            return "liên kêt không tồn tại hoặc sai định dạng";
-        }return $price->text();
+            return 0;
+        }return $this->cTN($price->text())*1000;
             
+        }
+
+        private function cTN($input) {
+            // Remove any non-numeric characters and currency symbols
+            $number = preg_replace('/[^\d,.]/', '', $input);
+        
+            // Replace commas with decimal points
+            $number = str_replace(',', '.', $number);
+        
+            // Convert the number to a float
+            $number = (float) $number;
+        
+            return $number;
         }
 
         
