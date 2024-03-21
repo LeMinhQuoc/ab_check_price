@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\NowPrice;
+use App\Models\PriceOld;
 use Illuminate\Http\Request;
 use App\Models\Product;
 require_once '../vendor/autoload.php';
@@ -9,6 +11,7 @@ use Goutte\Client;
 use DOMDocument;
 use DOMXPath;
 use Exception;
+use DB;
             
 
 class ProductController extends Controller
@@ -16,12 +19,75 @@ class ProductController extends Controller
     
     public function index(Request $request)
     {
-        $product_checked=$this->checkPrice(Product::all());
+        
+        $product_checked=Product::all();
+        $now_p=NowPrice::all();
+        $old_p=PriceOld::all();
+
+    
+
         return view('product.add_product', [
-            'products' => $product_checked
+            'products' => $product_checked,
+            'old_p'=> $old_p,
+            'new_p'=> $now_p,
+            'c_ab' => $this->configCompare($old_p,$now_p,'p_ab'),
+            'c_hsk' => $this->configCompare($old_p,$now_p,'p_hsk'),
+            'c_gu' => $this->configCompare($old_p,$now_p,'p_gu'),
+            'c_tgk' => $this->configCompare($old_p,$now_p,'p_tgk'),
+            'c_tl' => $this->configCompare($old_p,$now_p,'p_tl')
         ]);
+    //   $this-> updateOldPrice();
     }
 
+    private function  configCompare($p_olds,$p_news,$var){
+            $array=[];
+            $i=0;
+
+            foreach($p_olds as $p_old ){
+                
+                $array[]=$this->compare($p_news[$i]->$var,$p_olds[$i]->$var);
+                $i++;
+            }
+            return $array;
+            
+    }
+
+    private function compare($new,$old){
+       
+       
+            if($new > $old){
+                return "tăng";
+            }elseif($new < $old){
+                return "giảm";
+            }else {
+                return "";
+            }
+
+        
+    }
+    public function updateOldPrice(){
+        DB::table('price_olds')->delete();
+        $data = DB::table('now_prices')->get()->toArray();
+        DB::table('price_olds')->insert(json_decode(json_encode($data), true));
+    }
+
+    public function addProductToPNow()
+    {
+        $products=$this->checkPrice(Product::all());
+        DB::table('now_prices')->delete();
+
+         foreach($products as $product){
+            var_dump($product->hasaki);
+            DB::table('now_prices')->insert([
+                'p_id' => $product->id,
+                'p_ab' => $product->ab_beautyworld,
+                'p_hsk'=> $product->hasaki,
+                'p_gu'=> $product->guardian,
+                'p_tgs'=> $product->thegioiskinfood,
+                'p_lt'=> $product->lamthao,
+            ]);
+         }
+    }
 
 
     private function checkPrice($products)

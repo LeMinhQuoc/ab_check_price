@@ -44,17 +44,20 @@
                 </tr>
             </thead>
 				<tbody>
+                    {{ $term =0 }}
             @foreach($products as $product)
                 <tr>
                     <td>{{$product->product_barcode}}</td>
                     <td>{{ $product->product_name }}</td>
                     <td>{{$product->brand}}</td>
-                    <td data-value="{{$product->ab_beautyworld}}">{{ $product->ab_beautyworld }}</td>
-                    <td data-value="{{$product->hasaki}}">{{ $product->hasaki }}</td>
-                    <td data-value="{{$product->guardian}}">{{ $product->guardian }}</td>
-                    <td data-value="{{$product->thegioiskinfood}}">{{ $product->thegioiskinfood }}</td>
-                    <td data-value="{{$product->lamthao}}">{{ $product->lamthao }}</td>
+                    <td data-value="{{$new_p[$term]->p_ab}}">  @if(is_numeric($new_p[$term]->p_ab )) @if($new_p[$term]->p_ab  > 0){{ number_format($new_p[$term]->p_ab , 0, ',', '.') }} (đ)@else  -  @endif @endif   {{ $c_ab[$term]}}</td>
+                    <td data-value="{{$new_p[$term]->p_hsk}}">@if(is_numeric($new_p[$term]->p_hsk )) @if($new_p[$term]->p_hsk  > 0){{ number_format($new_p[$term]->p_hsk , 0, ',', '.') }} (đ)@else  -  @endif @endif  </td>
+                    <td data-value="{{$new_p[$term]->p_gu}}"> @if(is_numeric($new_p[$term]->p_gu )) @if($new_p[$term]->p_gu  > 0){{ number_format($new_p[$term]->p_gu , 0, ',', '.') }} (đ)@else  -  @endif @endif  </td>
+                    <td data-value="{{$new_p[$term]->p_tgk}}"> @if(is_numeric($new_p[$term]->p_tgk )) @if($new_p[$term]->p_tgk  > 0){{ number_format($new_p[$term]->p_tgk , 0, ',', '.') }} (đ)@else  -  @endif @endif </td>
+                    <td data-value="{{$new_p[$term]->p_lt}}"> @if(is_numeric($new_p[$term]->p_lt )) @if($new_p[$term]->p_lt  > 0){{ number_format($new_p[$term]->p_lt , 0, ',', '.') }} (đ)@else  -  @endif @endif  </td>
                 </tr>
+                
+                {{ $term++ }}
             @endforeach
         </tbody>
 			</table>
