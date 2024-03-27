@@ -10,7 +10,7 @@
 
 <body>
 	<header>
-		<h1>Price Comparison</h1>
+		<h1>Danh Sách Sản Phẩm</h1>
 	</header>
 	<main>
 
@@ -94,9 +94,7 @@
                     <form action="{{ route('products.detail', $product->id) }}" method="get">
                     @csrf
                     <button type="submit" class="btn btn-secondary" >Lịch Sử</button>
-                    </form></td>
-                    
-                    
+                    </form></td>  
                 </tr>
                 <?php $last_up_date=$new_p[$term]->created_at;
                  $term++; ?>
@@ -106,8 +104,12 @@
 		</section>
 	</main>
 	<footer class="footer">
-  <p>Cập nhật lần cuối: {{$last_up_date}}</p>
-		<p><a href="{{ route('reset') }}" >Reset</a>Love you!</p>
+    <?php $dateTime = new DateTime($last_up_date);
+
+$formattedDate = $dateTime->format('H:i:s   d-m-Y');?>
+  <p>Cập nhật lần cuối: {{$formattedDate}}</p>
+ <p> Dự Án Mã Nguồn Mở <a href='https://github.com/LeMinhQuoc/ab_check_price'> GitHub </a></p>
+		<p>Love you! </p>
 	</footer>
 </body>
 <script src="{{ asset('js/app.js') }}"></script>

@@ -22,7 +22,7 @@
             <thead>
                 <tr>
                 <th>STT</th>
-                <th>Ngày Cập Nhật</th>
+                <th>Thời Gian Cập Nhật</th>
                 <th>AB</th>
                 <th>Hasaki</th>
                 <th>Guardian</th>
@@ -49,7 +49,7 @@
 		</section>
 	</main>
 	<footer class="footer">
-		<p><a href="{{ route('reset') }}" >Reset</a>Love you!</p>
+		<p>Love you!</p>
 	</footer>
 </body>
 <script src="{{ asset('js/app.js') }}"></script>
