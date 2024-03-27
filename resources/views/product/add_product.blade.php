@@ -71,7 +71,8 @@
                 </tr>
             </thead>
 				<tbody>
-             <?php  $term =0; ?>      
+             <?php  $term =0; 
+             $last_up_date='';?>      
             @foreach($products as $product)
             <?php
             $ab_icon = $c_ab[$term]; $ab_color = '';if ($ab_icon == 'fa fa-chevron-up') {$ab_color = '#63E6BE';}if ($ab_icon == 'fa fa-chevron-down') {$ab_color = 'red'; } $hsk_icon = $c_hsk[$term];$hsk_color = ''; if ($hsk_icon == 'fa fa-chevron-up') {$hsk_color = '#63E6BE';}if ($hsk_icon == 'fa fa-chevron-down') {$hsk_color = 'red'; }$gu_icon = $c_gu[$term];$gu_color = '';if ($gu_icon == 'fa fa-chevron-up') {$gu_color = '#63E6BE';}if ($gu_icon == 'fa fa-chevron-down') {$gu_color = 'red'; }$tgk_icon = $c_tgk[$term];$tgk_color = ''; if ($tgk_icon == 'fa fa-chevron-up') {$tgk_color = '#63E6BE';}if ($tgk_icon == 'fa fa-chevron-down') {$tgk_color = 'red'; } $tl_icon = $c_tl[$term]; $tl_color = '';if ($tl_icon == 'fa fa-chevron-up') {$tl_color = '#63E6BE';}if ($tl_icon == 'fa fa-chevron-down') {$tl_color = 'red'; }
@@ -81,23 +82,31 @@
                     <td>{{$product->product_barcode}}</td>
                     <td>{{ $product->product_name }}</td>
                     <td>{{$product->brand}}</td>
-                    <td data-value="{{$new_p[$term]->p_ab}}" alt=""> <a class="link-price" href="{{$product->ab_beautyworld}}"> @if(is_numeric($new_p[$term]->p_ab )) @if($new_p[$term]->p_ab  > 0){{ number_format($new_p[$term]->p_ab , 0, ',', '.') }} (đ)@else  -  @endif @endif  <i class="{{ $c_ab[$term]}}" style=" color: <?php echo $ab_color; ?>;"></i> <div class="oldPricePopup">@if(is_numeric($old_p[$term]->p_ab )) @if($old_p[$term]->p_ab  > 0){{ number_format($old_p[$term]->p_ab , 0, ',', '.') }} (đ)@else  -  @endif @endif</div> </a> </td>
-                    <td data-value="{{$new_p[$term]->p_hsk}}" alt=""> <a class="link-price" href="{{$product->hasaki}}">@if(is_numeric($new_p[$term]->p_hsk )) @if($new_p[$term]->p_hsk  > 0){{ number_format($new_p[$term]->p_hsk , 0, ',', '.') }} (đ)@else  -  @endif @endif  <i class="{{ $c_hsk[$term]}}" style=" color: <?php echo $hsk_color; ?>;"></i><div class="oldPricePopup">@if(is_numeric($old_p[$term]->p_hsk )) @if($old_p[$term]->p_hsk  > 0){{ number_format($old_p[$term]->p_hsk , 0, ',', '.') }} (đ)@else  -  @endif @endif</div></a></td>
-                    <td data-value="{{$new_p[$term]->p_gu}}" alt=""> <a class="link-price" href="{{$product->guardian}}">@if(is_numeric($new_p[$term]->p_gu )) @if($new_p[$term]->p_gu  > 0){{ number_format($new_p[$term]->p_gu , 0, ',', '.') }} (đ)@else  -  @endif @endif  <i class="{{ $c_gu[$term]}}" style=" color: <?php echo $gu_color; ?>;"></i><div class="oldPricePopup">@if(is_numeric($old_p[$term]->p_gu )) @if($old_p[$term]->p_gu  > 0){{ number_format($old_p[$term]->p_gu , 0, ',', '.') }} (đ)@else  -  @endif @endif</div></a></td>
-                    <td data-value="{{$new_p[$term]->p_tgk}}" alt=""> <a class="link-price" href="{{$product->thegioiskinfood}}">@if(is_numeric($new_p[$term]->p_tgs )) @if($new_p[$term]->p_tgs  > 0){{ number_format($new_p[$term]->p_tgs , 0, ',', '.') }} (đ)@else  -  @endif @endif <i class="{{ $c_tgk[$term]}}" style=" color: <?php echo $tgk_color; ?>;"></i> <div class="oldPricePopup">@if(is_numeric($old_p[$term]->p_tgs )) @if($old_p[$term]->p_tgs  > 0){{ number_format($old_p[$term]->p_tgs , 0, ',', '.') }} (đ)@else  -  @endif @endif</div></a></td>
-                    <td data-value="{{$new_p[$term]->p_lt}}" alt=""> <a class="link-price" href="{{$product->lamthao}}">@if(is_numeric($new_p[$term]->p_lt )) @if($new_p[$term]->p_lt  > 0){{ number_format($new_p[$term]->p_lt , 0, ',', '.') }} (đ)@else  -  @endif @endif  <i class="{{ $c_tl[$term]}}" style=" color: <?php echo $tl_color; ?>;"></i> <div class="oldPricePopup">@if(is_numeric($old_p[$term]->p_lt )) @if($old_p[$term]->p_lt  > 0){{ number_format($old_p[$term]->p_lt , 0, ',', '.') }} (đ)@else  -  @endif @endif</div></a></td>
+                    <td data-value="{{$new_p[$term]->p_ab}}" alt=""> <a class="link-price" href="{{$product->ab_beautyworld}}"> @if(is_numeric($new_p[$term]->p_ab )) @if($new_p[$term]->p_ab  > 0){{ number_format($new_p[$term]->p_ab , 0, ',', '.') }} (đ)@else  -  @endif @endif  <i class="{{ $c_ab[$term]}}" style=" color: <?php echo $ab_color; ?>;"></i></a> </td>
+                    <td data-value="{{$new_p[$term]->p_hsk}}" alt=""> <a class="link-price" href="{{$product->hasaki}}">@if(is_numeric($new_p[$term]->p_hsk )) @if($new_p[$term]->p_hsk  > 0){{ number_format($new_p[$term]->p_hsk , 0, ',', '.') }} (đ)@else  -  @endif @endif  <i class="{{ $c_hsk[$term]}}" style=" color: <?php echo $hsk_color; ?>;"></i></a></td>
+                    <td data-value="{{$new_p[$term]->p_gu}}" alt=""> <a class="link-price" href="{{$product->guardian}}">@if(is_numeric($new_p[$term]->p_gu )) @if($new_p[$term]->p_gu  > 0){{ number_format($new_p[$term]->p_gu , 0, ',', '.') }} (đ)@else  -  @endif @endif  <i class="{{ $c_gu[$term]}}" style=" color: <?php echo $gu_color; ?>;"></i></a></td>
+                    <td data-value="{{$new_p[$term]->p_tgs}}" alt=""> <a class="link-price" href="{{$product->thegioiskinfood}}">@if(is_numeric($new_p[$term]->p_tgs )) @if($new_p[$term]->p_tgs  > 0){{ number_format($new_p[$term]->p_tgs , 0, ',', '.') }} (đ)@else  -  @endif @endif <i class="{{ $c_tgk[$term]}}" style=" color: <?php echo $tgk_color; ?>;"></i> </a></td>
+                    <td data-value="{{$new_p[$term]->p_lt}}" alt=""> <a class="link-price" href="{{$product->lamthao}}">@if(is_numeric($new_p[$term]->p_lt )) @if($new_p[$term]->p_lt  > 0){{ number_format($new_p[$term]->p_lt , 0, ',', '.') }} (đ)@else  -  @endif @endif  <i class="{{ $c_tl[$term]}}" style=" color: <?php echo $tl_color; ?>;"></i> </a></td>
+                    
+                    <td>
                     <form action="{{ route('product.delete', $product->id) }}" method="POST">
+                    @csrf<button type="submit" class="btn btn-danger" onclick="checkAgain()">Xóa SP</button></form>
+                    <form action="{{ route('products.detail', $product->id) }}" method="get">
                     @csrf
-                    <td><button type="submit" class="btn btn-danger" onclick="checkAgain()">Delete</button></td>
-                    </form>
+                    <button type="submit" class="btn btn-secondary" >Lịch Sử</button>
+                    </form></td>
+                    
+                    
                 </tr>
-                <?php $term++; ?>
+                <?php $last_up_date=$new_p[$term]->created_at;
+                 $term++; ?>
             @endforeach        
         </tbody>
 			</table>
 		</section>
 	</main>
 	<footer class="footer">
+  <p>Cập nhật lần cuối: {{$last_up_date}}</p>
 		<p><a href="{{ route('reset') }}" >Reset</a>Love you!</p>
 	</footer>
 </body>

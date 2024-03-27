@@ -32,3 +32,4 @@ Route::get('products', [Product::class, 'index'])->name('products.index');
 Route::get('add_form', [Product::class, 'addForm'])->name('products.form');
 Route::post('delete/{id}',[Product::class, 'delete'])->name('product.delete');
 Route::get('reset', [Product::class, 'reset'])->name('reset');
+Route::get('products/{id}', [Product::class, 'detail'])->name('products.detail');
