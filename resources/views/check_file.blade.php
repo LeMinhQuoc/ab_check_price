@@ -109,13 +109,8 @@ $products = [
 </table>
 
 
-<?php
-require_once '../vendor/autoload.php';
 
 
-use Goutte\Client;
 
-$client = new Client();
-$crawler = $client->request('GET', 'https://hasaki.vn/san-pham/kem-chong-nang-skin1004-chiet-xuat-rau-ma-spf50-pa-50ml-86167.html');
-$finalPrice = $crawler->filter('#product_final_price')->attr('value');
-echo $finalPrice;
+
+<a href="{{ route('add_p_form') }}" class="btn btn-primary">Chuyển hướng</a>
