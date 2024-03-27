@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController  as Product;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +29,6 @@ Route::get('/add_p_form', function () {
 // Route::post("/upload", 'ProductController@store')->name("upload");
 Route::post('products', [Product::class, 'store'])->name('products.store');
 Route::get('products', [Product::class, 'index'])->name('products.index');
+Route::get('add_form', [Product::class, 'addForm'])->name('products.form');
+Route::post('delete/{id}',[Product::class, 'delete'])->name('product.delete');
+Route::get('reset', [Product::class, 'reset'])->name('reset');

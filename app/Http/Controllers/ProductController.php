@@ -1,12 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+require_once '../vendor/autoload.php';
 use App\Models\NowPrice;
 use App\Models\PriceOld;
 use Illuminate\Http\Request;
 use App\Models\Product;
-require_once '../vendor/autoload.php';
 use Goutte\Client;
 use DOMDocument;
 use DOMXPath;
@@ -16,16 +15,32 @@ use DB;
 
 class ProductController extends Controller
 {
-    
-    public function index(Request $request)
+// Form thêm sản phẩm 
+    public function addForm()
     {
-        
+        return view('product.add_product_form');
+    }
+// Xóa 1 dòng Sản Phẩm
+    public function delete($id)
+    {
+        DB::table('products')->where('id', $id)->delete();
+        DB::table('now_prices')->where('p_id', $id)->delete();
+        DB::table('price_olds')->where('p_id', $id)->delete(); 
+        return redirect()->route('products.index'); 
+    }
+
+//Reset database
+    public function reset() {
+        $this->updateOldPrice();
+        $this->addProductToPNow();
+        return redirect()->route('products.index'); 
+    }
+// Load homepage check giá
+    public function index()
+    {
         $product_checked=Product::all();
         $now_p=NowPrice::all();
         $old_p=PriceOld::all();
-
-    
-
         return view('product.add_product', [
             'products' => $product_checked,
             'old_p'=> $old_p,
@@ -33,51 +48,43 @@ class ProductController extends Controller
             'c_ab' => $this->configCompare($old_p,$now_p,'p_ab'),
             'c_hsk' => $this->configCompare($old_p,$now_p,'p_hsk'),
             'c_gu' => $this->configCompare($old_p,$now_p,'p_gu'),
-            'c_tgk' => $this->configCompare($old_p,$now_p,'p_tgk'),
+            'c_tgk' => $this->configCompare($old_p,$now_p,'p_tgs'),
             'c_tl' => $this->configCompare($old_p,$now_p,'p_tl')
         ]);
-    //   $this-> updateOldPrice();
     }
-
+// Load chuỗi thêm chuỗi đánh giá tăng giảm vào
     private function  configCompare($p_olds,$p_news,$var){
             $array=[];
             $i=0;
-
             foreach($p_olds as $p_old ){
-                
                 $array[]=$this->compare($p_news[$i]->$var,$p_olds[$i]->$var);
                 $i++;
             }
             return $array;
-            
     }
-
+// So sánh nếu giá mới > giá cũ thì hiển thị tăng và ngược lại
     private function compare($new,$old){
-       
-       
             if($new > $old){
-                return "tăng";
+                return "fa fa-chevron-up";
             }elseif($new < $old){
-                return "giảm";
+                return "fa fa-chevron-down";
             }else {
                 return "";
-            }
-
-        
+            } 
     }
-    public function updateOldPrice(){
+// Xóa dữ liệu giá cũ chèn dữ liệu của giá mới vào giá cũ
+    private function updateOldPrice(){
         DB::table('price_olds')->delete();
         $data = DB::table('now_prices')->get()->toArray();
         DB::table('price_olds')->insert(json_decode(json_encode($data), true));
     }
+//Lấy dữ liệu từ Products  lấy giá theo link và gán vào bản giá mới
 
-    public function addProductToPNow()
+    private function addProductToPNow()
     {
         $products=$this->checkPrice(Product::all());
         DB::table('now_prices')->delete();
-
          foreach($products as $product){
-            var_dump($product->hasaki);
             DB::table('now_prices')->insert([
                 'p_id' => $product->id,
                 'p_ab' => $product->ab_beautyworld,
@@ -89,7 +96,7 @@ class ProductController extends Controller
          }
     }
 
-
+// Check giá theo link
     private function checkPrice($products)
         {
             foreach ($products as $product) {
@@ -101,7 +108,7 @@ class ProductController extends Controller
             }
             return $products;
         }
-
+// Scanner của từng thương hiệu
         private function hasakiScanner($value)
         {
             $client = new Client();
@@ -113,6 +120,7 @@ class ProductController extends Controller
         }
             return $this->cTN($finalPrice);
         }
+
 
         private function guScanner($value)
         { 
@@ -167,46 +175,30 @@ class ProductController extends Controller
 
         $xpath = new DOMXPath($dom);
         $prices = $xpath->query("//span[@class='current-price ProductPrice']");
-        $price = $prices->item(0)->nodeValue; // Remove the trailing text from the price
-
+        $price = $prices->item(0)->nodeValue; 
         $price = $this->cTN($price)*1000;  
-        
         return $price;        
         }
+
         private function abScanner($link)
         {
             $client = new Client();
             try {
             $crawler = $client->request('GET', $link);
             $price = $crawler->filter('span.pro-price');
-            
         } catch (Exception $e) {
-            // Handle the exception here
             return 0;
         }return $this->cTN($price->text())*1000;
             
         }
-
+        // đưa giá từ chuỗi ký tự về dạng số
         private function cTN($input) {
-            // Remove any non-numeric characters and currency symbols
             $number = preg_replace('/[^\d,.]/', '', $input);
-        
-            // Replace commas with decimal points
             $number = str_replace(',', '.', $number);
-        
-            // Convert the number to a float
             $number = (float) $number;
-        
             return $number;
         }
-
-        
-
-
-       
-
-
-
+// Nhập dữ liệu mới theo Form 
     public function store(Request $request)
 {
     $validatedData = $request->validate([
@@ -219,12 +211,8 @@ class ProductController extends Controller
         'thegioiskinfood' => 'required|max:255',
         'lamthao' => 'required|max:255',
     ]);
-
     $product = Product::create($validatedData);
-
     return redirect()->route('products.index')->with('success', 'Product created successfully.');
 }
 
 }
-
-

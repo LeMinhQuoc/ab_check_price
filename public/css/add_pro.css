@@ -6,8 +6,9 @@ body {
     background-color: #333333;
     padding: 20px;
     color: #fff;
-    width: 200px;
+    width: 400px;
 }
+
 
 .styled-input {
     display: block;
@@ -92,3 +93,114 @@ footer {
 .max {
     color: blue;
 }
+.link-price {
+	text-decoration: none;
+	color: gray;
+}
+.link-price:hover{
+  text-decoration: none;
+  color: black;
+}
+th {
+    text-align: center;
+}
+.footer {
+   position: fixed;
+   bottom: 0;
+   width: 100%;
+   text-align: center;
+}
+
+
+
+#popupForm {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        /* Style the form and position it in the center */
+        #formContainer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+			background-color: #333333;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+			
+        }
+
+        /* Style the form elements */
+        #formContainer input,
+        #formContainer textarea,
+        #formContainer select,
+        #formContainer button {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        /* Add a transition for the popup animation */
+        #popupForm {
+            transition: opacity 3s ease-in-out;
+        }
+
+        /*hiện*/
+        #showPopup:focus {
+            outline: none;
+        }
+        #showPopup:focus ~ #popupForm {
+            display: block;
+        }
+
+      /* ẩn */
+        #formContainer form {
+            display: flex;
+            flex-direction: column;
+        }
+        #formContainer form input[type="submit"]:focus {
+            outline: none;
+        }
+        #formContainer form input[type="submit"]:active {
+            opacity: 0.5;
+        }
+        #formContainer form input[type="submit"]:active ~ #popupForm {
+            opacity: 0;
+            transition: opacity 0s 0.3s ease-in-out;
+        }
+		.formTitle{
+			font-size: 24px;
+			text-align: center;
+		}
+		th{	
+			background-color: #6C757D;
+		}
+		tr:hover{
+			background-color: lightgrey;
+		}
+
+
+		.oldPricePopup {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+       
