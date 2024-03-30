@@ -50,7 +50,8 @@ public function detail($id)
 // Load homepage check giá
     public function index()
     {
-        $products=Product::all();
+        $products= DB::table('products')->paginate(5);
+
         $p_rows = DB::select("
         SELECT * 
         FROM (
@@ -133,11 +134,22 @@ private function  configCompareP($p_olds,$p_news,$var){
             } 
     }
 // Xóa dữ liệu giá cũ chèn dữ liệu của giá mới vào giá cũ
- /*   private function updateOldPrice(){
+   private function updateOldPrice($data){
         DB::table('price_olds')->delete();
-        $data = DB::table('now_prices')->get()->toArray();
+        $data =  DB::select("
+        SELECT * 
+        FROM (
+            SELECT 
+            @rn:=IF(@prev = p_id, @rn + 1, 1) as rn,
+            @prev:=p_id, 
+            t.*
+            FROM now_prices t, (SELECT @prev:=null, @rn:=0) as vars
+            ORDER BY p_id, created_at DESC
+        ) as subquery
+        WHERE subquery.rn = 1;
+    ");
         DB::table('price_olds')->insert(json_decode(json_encode($data), true));
-    } */
+    } 
 //Lấy dữ liệu từ Products  lấy giá theo link và gán vào bản giá mới
 
     private function addProductToPNow()

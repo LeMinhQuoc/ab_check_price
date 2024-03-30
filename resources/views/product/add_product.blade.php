@@ -52,7 +52,9 @@
     <button type="submit" class="styled-button">Submit</button>
     </form>
 </section> -->
-	
+<?php
+
+?>
     
 		<section>
 			<table>
@@ -96,20 +98,27 @@
                     <button type="submit" class="btn btn-secondary" >Lịch Sử</button>
                     </form></td>  
                 </tr>
-                <?php $last_up_date=$new_p[$term]->created_at;
+                <?php
+                 $last_up_date=$new_p[$term]->created_at;
                  $term++; ?>
             @endforeach        
         </tbody>
 			</table>
+      {{ $products->links('product/custom_pagination') }}
 		</section>
 	</main>
 	<footer class="footer">
-    <?php $dateTime = new DateTime($last_up_date);
+
+   
+    <?php 
+    date_default_timezone_set('Asia/Ho_Chi_Minh');
+    $dateTime = new DateTime($last_up_date);
 
 $formattedDate = $dateTime->format('H:i:s   d-m-Y');?>
   <p>Cập nhật lần cuối: {{$formattedDate}}</p>
  <p> Dự Án Mã Nguồn Mở <a href='https://github.com/LeMinhQuoc/ab_check_price'> GitHub </a></p>
 		<p>Love you! </p>
+    <p onclick="window.location='{{ route('reset') }}'" style="color:#333333">Reset</p>
 	</footer>
 </body>
 <script src="{{ asset('js/app.js') }}"></script>

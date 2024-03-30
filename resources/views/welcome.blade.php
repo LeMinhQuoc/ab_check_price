@@ -26,7 +26,7 @@
 </head>
 <body>
     <div class="menu">
-        <a href="http://localhost/AB_Check_P/public/products">Check giá</a>
+        <a onclick="window.location='{{ route('products.index') }}'">Check giá</a>
         <a href="#">Chat Box AI</a>
         <a href="#">Training</a>
         <a href="#">Blog chuyện AB</a>

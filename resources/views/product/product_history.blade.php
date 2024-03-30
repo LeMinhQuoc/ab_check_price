@@ -16,7 +16,9 @@
 
   <section>
   <button class="btn btn-secondary" onclick="window.location='{{ route('products.index') }}'">Trở Lại</button> 
-  <p>Chi Tiết  Sản Phẩm {{$product->product_name}} </p>
+  <p>Chi Tiết  Sản Phẩm :</p>
+  <p>- Tên : {{$product->product_name}}</p>
+  <p>- Barcode :  {{$product->product_barcode}}</p>
 		<section>
 			<table>
             <thead>
