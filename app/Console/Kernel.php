@@ -17,11 +17,16 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('update:data')->dailyAt('12:00');
+       /* $schedule->command('update:data')->dailyAt('12:00');
         $schedule->call(function () {
             $controller = new ProductController();
             $controller->addProductToPNow();
-        })->dailyAt('12:00');
+        })->dailyAt('12:00'); */
+
+        $schedule->call(function () {
+            $client = new \GuzzleHttp\Client();
+        $client->request('GET', 'https://itgacon.xyz/check_p/public/index.php/reset');
+        })->twiceDaily(12, 18);
     }
 
     /**
