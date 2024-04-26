@@ -182,7 +182,6 @@ class ProductController extends Controller
 
     {
         foreach ($products as $product) {
-            var_dump($product);
             $product->ab_beautyworld = $this->abScanner($product->ab_beautyworld);
             $product->hasaki = $this->hasakiScanner($product->hasaki);
             $product->guardian = $this->guScanner($product->guardian);
@@ -193,6 +192,81 @@ class ProductController extends Controller
 
         return $products;
     }
+
+    private function abScanner($link)
+    {
+        return $this->selectScanner($link, 'GET', 'span.pro-price', null, 1000);
+    }
+    private function hasakiScanner($value)
+    {
+        return $this->selectScanner($value, 'GET', '#product_final_price', 'value');
+    }
+    private function guScanner($value)
+    {
+        return $this->selectScanner($value, 'GET', "//span[@class='price']", null, 1000);
+    }
+    private function tgScanner($value)
+    {
+        return $this->selectScanner($value, 'GET', "//div[@class='page-product-info-newprice']", null, 1000);
+    }
+    private function ltScanner($value)
+    {
+        return $this->selectScanner($value, 'GET', "//span[@class='current-price ProductPrice']", null, 1000);
+    }
+
+    private function selectScanner($value, $method, $selector, $attribute = null, $multiplier = 1)
+    {
+        $var_client = $this->generalScanner($value, $method, $selector, $attribute, $multiplier);
+        if ($var_client) {
+            return $var_client;
+        } else {
+            return $this->domScanner($value, $method, $selector, $attribute, $multiplier);
+        }
+    }
+
+    private function generalScanner($value, $method, $selector, $attribute = null, $multiplier = 1)
+    {
+        $client = new Client();
+        try {
+            $crawler = $client->request('GET', $value);
+            $elements = $crawler->filter($selector);
+            if ($elements->count() > 0) {
+                $elementValue = ($attribute !== null) ? $elements->attr($attribute) : $elements->text();
+                return $this->cTN($elementValue) * $multiplier;
+            } else {
+                return 0;
+            }
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
+
+    private function domScanner($value, $method, $selector, $attribute = null, $multiplier = 1)
+    {
+
+        $dom = new DOMDocument;
+        libxml_use_internal_errors(true);
+        try {
+            $dom->loadHTML(file_get_contents($value));
+        } catch (Exception $e) {
+            return false;
+        }
+        libxml_clear_errors();
+        $xpath = new DOMXPath($dom);
+        $prices = $xpath->query($selector);
+        try {
+            if ($prices->length > 0) {
+                $price = $prices->item(0)->nodeValue;
+                return $this->cTN($price) * 1000;
+            } else {
+                return false;
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /*
     private function abScanner($link)
     {
         $client = new Client();
@@ -299,7 +373,7 @@ class ProductController extends Controller
         } else {
             return 0;
         }
-    }
+    } */
 
 
     // đưa giá từ chuỗi ký tự về dạng số

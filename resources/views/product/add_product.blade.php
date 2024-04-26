@@ -159,10 +159,9 @@
     $dateTime = new DateTime($last_up_date);
 
     $formattedDate = $dateTime->format('H:i:s   d-m-Y'); ?>
-    <p>Cập nhật lần cuối: {{$formattedDate}}</p>
-    <p> Dự Án Mã Nguồn Mở <a href='https://github.com/LeMinhQuoc'> GitHub </a></p>
-    <p>Dự án được xây dựng bởi: Lê Minh Quốc - Mobile: +(84)0394844753 - Email: minhquoc7a3a@gmail.com </p>
-    <p onclick="window.location='{{ route('reset') }}'">Reset</p>
+    <p>Last Update At: {{$formattedDate}} <a onclick="window.location='{{ route('reset') }}'">>>[RESET]<<</a></p>
+    <p> Project built by: Le Minh Quoc - Mobile: +(84)0394844753 Opensource :<a href='https://github.com/LeMinhQuoc'> GitHub </a></p>
+    
   </footer>
 </body>
 <script src="{{ asset('js/app.js') }}"></script>
