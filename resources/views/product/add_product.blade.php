@@ -152,16 +152,12 @@
     </section>
   </main>
   <footer class="footer">
-
-
     <?php
     date_default_timezone_set('Asia/Ho_Chi_Minh');
     $dateTime = new DateTime($last_up_date);
-
     $formattedDate = $dateTime->format('H:i:s   d-m-Y'); ?>
     <p>Last Update At: {{$formattedDate}} <a onclick="window.location='{{ route('reset') }}'">>>[RESET]<<</a></p>
     <p> Project built by: Le Minh Quoc - Mobile: +(84)0394844753 Opensource :<a href='https://github.com/LeMinhQuoc'> GitHub </a></p>
-    
   </footer>
 </body>
 <script src="{{ asset('js/app.js') }}"></script>

@@ -8,6 +8,7 @@ use App\Models\NowPrice;
 use App\Models\PriceOld;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Http\Controllers\CrawlerController;
 use Goutte\Client;
 use DOMDocument;
 use DOMXPath;
@@ -48,12 +49,13 @@ class ProductController extends Controller
     {
 
         $this->addProductToPNow();
+        
         return redirect()->route('products.index');
     }
     // Load homepage check giá
     public function index()
     {
-        $products = DB::table('products')->paginate(5);
+        $products = DB::table('products')->paginate(50);
 
         $p_rows = DB::select("
         SELECT * 
@@ -181,12 +183,14 @@ class ProductController extends Controller
     private function checkPrice($products)
 
     {
+        
         foreach ($products as $product) {
             $product->ab_beautyworld = $this->abScanner($product->ab_beautyworld);
             $product->hasaki = $this->hasakiScanner($product->hasaki);
             $product->guardian = $this->guScanner($product->guardian);
             $product->thegioiskinfood = $this->tgScanner($product->thegioiskinfood);
             $product->lamthao = $this->ltScanner($product->lamthao);
+
         }
 
 
@@ -216,11 +220,24 @@ class ProductController extends Controller
 
     private function selectScanner($value, $method, $selector, $attribute = null, $multiplier = 1)
     {
-        $var_client = $this->generalScanner($value, $method, $selector, $attribute, $multiplier);
-        if ($var_client) {
-            return $var_client;
+        $crawler = new CrawlerController();
+        $gtagVa=  $crawler->getPrice($value);
+  
+    
+       
+        if ($gtagVa) {
+           return $gtagVa;
+            
         } else {
-            return $this->domScanner($value, $method, $selector, $attribute, $multiplier);
+            $var_client = $this->generalScanner($value, $method, $selector, $attribute, $multiplier);
+            if($var_client){
+                
+            return $var_client;
+
+            }else{
+                return $this->domScanner($value, $method, $selector, $attribute, $multiplier);
+            }
+            
         }
     }
 
@@ -257,7 +274,7 @@ class ProductController extends Controller
         try {
             if ($prices->length > 0) {
                 $price = $prices->item(0)->nodeValue;
-                return $this->cTN($price) * 1000;
+                return $this->cTN($price);
             } else {
                 return false;
             }
@@ -379,9 +396,12 @@ class ProductController extends Controller
     // đưa giá từ chuỗi ký tự về dạng số
     private function cTN($input)
     {
-        $number = preg_replace('/[^\d,.]/', '', $input);
-        $number = str_replace(',', '.', $number);
+        $number = preg_replace('/[^\d]/', '', $input);
         $number = (float) $number;
+        if(strlen((string)$number)>=9){
+
+            return $number/1000;
+        }
         return $number;
     }
     // Nhập dữ liệu mới theo Form 

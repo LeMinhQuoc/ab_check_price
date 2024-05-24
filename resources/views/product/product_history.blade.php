@@ -50,7 +50,9 @@
 			</table>
 		</section>
 	</main>
-	<footer class="footer">
+	<footer class="footer" style="position: fixed;bottom: 0;
+   width: 100%;
+   text-align: center;">
 		<p>Love you!</p>
 	</footer>
 </body>
