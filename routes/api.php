@@ -22,5 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::post('/save-id', [ApiController::class, 'saveId']);
-Route::get('/id', [ApiController::class, 'getId']);
+Route::get('/product', [ApiController::class, 'productDetailAPI']);
 

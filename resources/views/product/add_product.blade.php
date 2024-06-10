@@ -61,7 +61,7 @@
     ?>
 
     <section>
-      <table>
+      <table class=".ex-table">
         <thead>
           <tr>
             <th>STT</th>
@@ -77,11 +77,47 @@
           </tr>
         </thead>
         <tbody>
-          <?php $term = 0;
+          <?php 
+         
+       $term =0;
+         
+         
+         
+        /*$page = request()->input('page', 1);
+        
+        if($page==1){
+            session()->flush();
+            session(['ab_icons' => '$c_ab']);
+            session(['hsk_icons' => '$c_hsk']);
+            session(['gu_icons' => '$c_gu']);
+            session(['tgk_icons' => '$c_tgk']);
+            session(['tl_icons' => '$c_tl']);
+             $ab_icons=$c_ab;
+             $hsk_icons=$c_hsk;
+             $gu_icons=$c_gu;
+             $tgk_icons=$c_tgk;
+             $tl_icons=$c_tl;
+        
+        }else{
+            $ab_icons=session('ab_icons');
+             $hsk_icons=session('hsk_icons');
+             $gu_icons=session('gu_icons');
+             $tgk_icons=session('tgk_icons');
+             $tl_icons=session('tl_icons');  
+        }
+        
+        
+        $perPage = 49; 
+        $term = ($page - 1) * $perPage;*/
+          $ab_icons=$c_ab;
+             $hsk_icons=$c_hsk;
+             $gu_icons=$c_gu;
+             $tgk_icons=$c_tgk;
+             $tl_icons=$c_tl;
           $last_up_date = ''; ?>
           @foreach($products as $product)
           <?php
-          $ab_icon = $c_ab[$term];
+          $ab_icon = $ab_icons[$term];
           $ab_color = '';
           if ($ab_icon == 'fa fa-chevron-up') {
             $ab_color = '#63E6BE';
@@ -89,7 +125,7 @@
           if ($ab_icon == 'fa fa-chevron-down') {
             $ab_color = 'red';
           }
-          $hsk_icon = $c_hsk[$term];
+          $hsk_icon = $hsk_icons[$term];
           $hsk_color = '';
           if ($hsk_icon == 'fa fa-chevron-up') {
             $hsk_color = '#63E6BE';
@@ -97,7 +133,7 @@
           if ($hsk_icon == 'fa fa-chevron-down') {
             $hsk_color = 'red';
           }
-          $gu_icon = $c_gu[$term];
+          $gu_icon = $gu_icons[$term];
           $gu_color = '';
           if ($gu_icon == 'fa fa-chevron-up') {
             $gu_color = '#63E6BE';
@@ -105,7 +141,7 @@
           if ($gu_icon == 'fa fa-chevron-down') {
             $gu_color = 'red';
           }
-          $tgk_icon = $c_tgk[$term];
+          $tgk_icon = $tgk_icons[$term];
           $tgk_color = '';
           if ($tgk_icon == 'fa fa-chevron-up') {
             $tgk_color = '#63E6BE';
@@ -113,7 +149,7 @@
           if ($tgk_icon == 'fa fa-chevron-down') {
             $tgk_color = 'red';
           }
-          $tl_icon = $c_tl[$term];
+          $tl_icon = $tl_icons[$term];
           $tl_color = '';
           if ($tl_icon == 'fa fa-chevron-up') {
             $tl_color = '#63E6BE';
@@ -134,8 +170,7 @@
             <td data-value="{{$new_p[$term]->p_lt}}" alt=""> <a class="link-price" href="{{$product->lamthao}}">@if(is_numeric($new_p[$term]->p_lt )) @if($new_p[$term]->p_lt > 0){{ number_format($new_p[$term]->p_lt , 0, ',', '.') }} (đ)@else - @endif @endif <i class="{{ $c_tl[$term]}}" style=" color: <?php echo $tl_color; ?>;"></i> </a></td>
 
             <td>
-              <form action="{{ route('product.delete', $product->id) }}" method="POST">
-                @csrf<button type="submit" class="btn btn-danger" onclick="checkAgain()">Xóa SP</button></form>
+              
               <form action="{{ route('products.detail', $product->id) }}" method="get">
                 @csrf
                 <button type="submit" class="btn btn-secondary">Lịch Sử</button>
@@ -148,16 +183,20 @@
           @endforeach
         </tbody>
       </table>
-      {{ $products->links('product/custom_pagination') }}
+     
     </section>
   </main>
   <footer class="footer">
+
+
     <?php
     date_default_timezone_set('Asia/Ho_Chi_Minh');
     $dateTime = new DateTime($last_up_date);
+
     $formattedDate = $dateTime->format('H:i:s   d-m-Y'); ?>
     <p>Last Update At: {{$formattedDate}} <a onclick="window.location='{{ route('reset') }}'">>>[RESET]<<</a></p>
-    <p> Project built by: Le Minh Quoc - Mobile: +(84)0394844753 Opensource :<a href='https://github.com/LeMinhQuoc'> GitHub </a></p>
+    <p> Project built by: Le Minh Quoc - Mobile: +(84)0394844753 <a href='https://github.com/LeMinhQuoc'> GitHub </a></p>
+    
   </footer>
 </body>
 <script src="{{ asset('js/app.js') }}"></script>

@@ -8,7 +8,6 @@
         "php": "^7.3|^8.0",
         "fabpot/goutte": "^4.0",
         "fruitcake/laravel-cors": "^2.0",
-        "google/apiclient": "^2.16",
         "guzzlehttp/guzzle": "^7.8",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
