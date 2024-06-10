@@ -12,13 +12,12 @@ use GuzzleHttp\Client;
 use Exception;
 use DB;
 
-
-
 class ApiController extends Controller
 {
     public function saveId(Request $request)
     {
         $id = $request->input('id');
+        $phone = $request->input('phone');
 
         if (!empty($id)) {
             // Đọc file nếu tồn tại
@@ -30,7 +29,8 @@ class ApiController extends Controller
             }
 
             // Thêm ID mới vào mảng
-            $data[] = $id;
+            $data[] = 'ip='.$id;
+             $data[] = 'phone='.$phone;
 
             // Ghi lại vào file
             file_put_contents($path, json_encode($data));
@@ -40,28 +40,10 @@ class ApiController extends Controller
             return response()->json(['error' => 'ID is required'], 400);
         }
     }
-
-    public function getId(){
-
-    $response = Http::get('https://api.ipify.org?format=json');
-
     
-    if ($response->successful()) {
-      
-        $data = $response->json();
-       
-        $ipAddress = $data['ip'] ?? 'Không thể lấy IP';
-    } else {
-       
-        $ipAddress = 'Có lỗi xảy ra trong quá trình lấy IP';
-    }
-
-    return $ipAddress;
-}
-
-
-
-public function productDetailAPI(Request $request){
+    
+    
+    public function productDetailAPI(Request $request){
     $barcode = $request->barcode;
     $pro = DB::table('product_id')->where('barcode', $barcode)->first();
     $pro_id=$pro->id;
@@ -77,13 +59,14 @@ public function productDetailAPI(Request $request){
 
         $data = json_decode($response->getBody(), true);
 
+         $data = json_decode($response->getBody(), true);
+
 
         $ab_p_url='https://abbeautyworld.com/products/';
-        $url = $data->handle;
+        $url = $data['product']['handle'];
         $product = new Client();
         $response = $client->request('GET', $ab_p_url . $url . '.json');
         $data_v = json_decode($response->getBody(), true);
-        return $data_v;
+        return $data_v['product'];
 }
-
 }
